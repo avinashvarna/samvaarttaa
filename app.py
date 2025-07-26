@@ -39,6 +39,7 @@ how centralized crypto platforms handle security and crisis management."""
 if "output" not in st.session_state:
     st.session_state.output = None
 
+
 # Cache API responses
 @st.cache_data
 def generate_sanskrit_translation(input_text, system_instruction):
@@ -49,6 +50,7 @@ def generate_sanskrit_translation(input_text, system_instruction):
     )
     parts = api_response.candidates[0].content.parts
     return "".join(part.text for part in parts)
+
 
 st.title("संवार्त्ता")
 st.markdown(
@@ -66,12 +68,13 @@ with st.expander("View Prompt (Non-editable)"):
     st.markdown(
         "Feel free to copy the prompt and experiment with it at "
         "[Google AI studio](https://aistudio.google.com/prompts/new_chat):"
-        )
+    )
     st.markdown(SYSTEM_INSTRUCTION)
 
 # Input form
 with st.form("input_form"):
-    st.write("Enter a detailed news article for best results. "
+    st.write(
+        "Enter a detailed news article for best results. "
         "To reiterate -  __*Always proofread*__ before publishing, "
         "as it might contain errors or hallucinations (i.e. made-up facts)."
     )
@@ -82,7 +85,10 @@ with st.form("input_form"):
                 pasted_text = pyperclip.paste()
                 st.session_state.input_text = pasted_text
             except Exception as e:
-                st.error("Failed to paste text. Please try again or paste manually.", icon="🚨")
+                st.error(
+                    "Failed to paste text. Please try again or paste manually.",
+                    icon="🚨",
+                )
     with col2:
         if st.form_submit_button("Clear"):
             st.session_state.input_text = ""
@@ -91,10 +97,7 @@ with st.form("input_form"):
         if st.form_submit_button("Load Demo Article"):
             st.session_state.input_text = DEMO_INPUT
 
-    input_text = st.text_area("Enter article below",
-        height="stretch",
-        key="input_text"
-    )
+    input_text = st.text_area("Enter article below", height="stretch", key="input_text")
 
     st.write(f"Input character count: {len(input_text)}")
     if len(input_text) > 5000:
@@ -105,20 +108,23 @@ with st.form("input_form"):
 if submitted:
     if not input_text.strip():
         st.error("Please enter a valid news article.")
-    try:
-        with st.spinner("Generating Sanskrit translation... Please wait."):
-            response = generate_sanskrit_translation(input_text, SYSTEM_INSTRUCTION)
-        st.session_state.output = response
-    except Exception as e:
-        st.error(f"Error generating translation: {str(e)}")
-        if "rate limit" in str(e).lower():
-            st.warning("Rate limit exceeded. Please try again later, as this demo supports a limited number of requests.")
+    else:
+        try:
+            with st.spinner("Generating Sanskrit translation... Please wait."):
+                response = generate_sanskrit_translation(input_text, SYSTEM_INSTRUCTION)
+            st.session_state.output = response
+        except Exception as e:
+            st.error(f"Error generating translation: {str(e)}")
+            if "rate limit" in str(e).lower():
+                st.warning(
+                    "Rate limit exceeded. Please try again later, as this demo supports a limited number of requests."
+                )
 
 # Display output if available
 if st.session_state.output:
     st.markdown("### Output")
     st.markdown(st.session_state.output)
-    
+
     col1, col2 = st.columns(2)
     with col1:
         # Copy button
@@ -128,7 +134,7 @@ if st.session_state.output:
                 st.success("Output copied to clipboard!")
             except Exception as e:
                 st.error("Failed to copy text. Please try again or copy manually.")
-    
+
     with col2:
         # Download button
         st.download_button(
@@ -136,5 +142,5 @@ if st.session_state.output:
             data=st.session_state.output,
             file_name="sanskrit_translation.txt",
             mime="text/plain",
-            icon=":material/download:"
+            icon=":material/download:",
         )
