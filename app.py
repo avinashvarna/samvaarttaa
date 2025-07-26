@@ -15,8 +15,7 @@ SYSTEM_INSTRUCTION = """Rewrite this news article into classical Sanskrit withou
     Carefully recheck the output for grammatical accuracy (correct case endings, verb conjugations, 
     and sandhi rules) and stylistic consistency before finalizing. Write surnames before names 
     and ensure proper sandhi all throughout the name. (e.g. शर्मरोहितः)
-    Similarly write english name in devanagari with original name in brackets (e.g. काविन्डीस्येक्ष् (CoinDCX))
-
+    Similarly write english name in devanagari with original name in brackets (e.g. काविन्डीस्येक्ष् (CoinDCX)).
     Provide just the translation without any other extra introductory text.
     """
 
