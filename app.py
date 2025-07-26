@@ -94,6 +94,7 @@ with st.form("input_form"):
 
     input_text = st.text_area("Enter article below",
         height="stretch",
+        key="input_text"
     )
 
     st.write(f"Input character count: {len(input_text)}")
